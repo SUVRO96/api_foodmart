@@ -7,6 +7,9 @@ const router = express.Router();
 // POST->  http://localhost:4000/users/adduser
 router.post("/adduser", async (req, res) => {
   try {
+    // const userExist = await User.findOne({ email: req.body.email });
+    // console.log(userExist);
+    // if (!userExist) {
     const last = await User.find().sort({ _id: -1 }).limit(1);
     const newId = last[0].id + 1;
     const newName = req.body.name.split(" ");
@@ -31,6 +34,15 @@ router.post("/adduser", async (req, res) => {
 router.get("/allusers", async (req, res) => {
   try {
     const response = await User.find();
+    res.status(200).json(response);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
+router.post("/userexist", async (req, res) => {
+  try {
+    const response = await User.findOne({ email: req.body.email });
     res.status(200).json(response);
   } catch (err) {
     res.status(400).json(err);
